@@ -5,26 +5,35 @@ import { db } from '../../db'
 import { schema } from '../../db/schemas'
 
 export const uploadImageRoute: FastifyPluginAsyncZod = async server => {
-  server.post('/uploads',{
-		schema: {
-			summary: "Upload as image",
-			body: z.object({
-				name: z.string(),
-				password: z.string().optional()
-			}),
-			response: {
-				201: z.object({ uploadId: z.string()}),
-				400: z.object({ message: z.string()}).describe("Upload already exists."),
-			}
-		} 
-	}, async (request, reply) => {
+  server.post(
+    '/uploads',
+    {
+      schema: {
+        summary: 'Upload as image',
+        consumes: ['multipart/form-data'],
+        body: z.object({
+          name: z.string(),
+          password: z.string().optional(),
+        }),
+        response: {
+          201: z.object({ uploadId: z.string() }),
+          400: z
+            .object({ message: z.string() })
+            .describe('Upload already exists.'),
+        },
+      },
+    },
+    async (request, reply) => {
+      const uploadedFile = await request.file({
+        limits: {
+          fileSize: 1024 * 1024 * 2,//2mb
+        },
+      })
 
-		await db.insert(schema.uploads).values({
-			name: "test.jpg",
-			remoteKey: "teste.jpg",
-			remoteUrl: "http://asasfdas.com"
-		})
+      console.log(uploadedFile);
+			
 
-    return reply.status(201).send({ uploadId: "test"})
-  })
+      return reply.status(201).send({ uploadId: 'test' })
+    }
+  )
 }

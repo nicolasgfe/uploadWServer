@@ -10,10 +10,6 @@ export const uploadImageRoute: FastifyPluginAsyncZod = async server => {
       schema: {
         summary: 'Upload as image',
         consumes: ['multipart/form-data'],
-        body: z.object({
-          name: z.string(),
-          password: z.string().optional(),
-        }),
         response: {
           201: z.null().describe('Image uploaded'),
           400: z
@@ -40,6 +36,8 @@ export const uploadImageRoute: FastifyPluginAsyncZod = async server => {
       })
 
       if (isRight(result)) {
+        console.log(unwrapEither(result));
+        
         return reply.status(201).send()
       }
 

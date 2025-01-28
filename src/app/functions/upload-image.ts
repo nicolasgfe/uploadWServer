@@ -2,8 +2,9 @@ import { Readable } from 'node:stream'
 import { z } from 'zod'
 import { db } from '../../infra/db'
 import { schema } from '../../infra/db/schemas'
-import { InvalidFileFormat } from './error/invalid-file-format'
+import { uploadFileToStorage } from '../../infra/storage/upload-file-to-storage'
 import { type Either, makeLeft, makeRight } from '../../shared/either'
+import { InvalidFileFormat } from './error/invalid-file-format'
 
 const uploadImageInput = z.object({
   fileName: z.string(),
@@ -24,14 +25,20 @@ export async function uploadImage(
     return makeLeft(new InvalidFileFormat())
   }
 
-  //todo caregar imagem para cloudFlare R2
+  const { key, url } = await uploadFileToStorage({
+    contentStream,
+    contentType,
+    fileName,
+    folder: 'images',
+  })
 
   await db.insert(schema.uploads).values({
     name: fileName,
-    remoteKey: fileName,
-    remoteUrl: fileName,
+    remoteKey: key,
+    remoteUrl: url,
   })
+  
   return makeRight({
-    url: '',
+    url: url,
   })
 }

@@ -12,5 +12,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "bundler",
+
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }

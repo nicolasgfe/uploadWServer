@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { isRight, unwrapEither } from '@/shared/either'
 import dayjs from 'dayjs'
 import { describe, expect, it } from 'vitest'
-import { makeUpload } from '../../../test/factories/maku-upload'
+import { makeUpload } from '../../../test/factories/make-upload'
 import { getUploads } from './get-uploads'
 
 describe('get uploads', () => {

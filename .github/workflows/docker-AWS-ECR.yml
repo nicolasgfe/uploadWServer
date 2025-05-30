@@ -60,11 +60,8 @@ jobs:
 
       - name: Build and push
         uses: docker/build-push-action@v6
-        env: 
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
-          IMAGE_TAG: ${{ steps.generate_tag.outputs.sha }}
         with:
+          context: .
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |

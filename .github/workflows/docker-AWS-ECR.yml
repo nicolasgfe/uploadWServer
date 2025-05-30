@@ -1,11 +1,9 @@
-name: widget-server pipe
+name: widget-server pipe AWS-ECR 
 
 on: 
   push: 
     branches: 
       - 'staging'
-env: 
-  CONTAINER_REPOSITORY: 'nicolasgfe/widget-server'
 
 jobs:
   Build: 
